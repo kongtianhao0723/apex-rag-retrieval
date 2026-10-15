@@ -2,16 +2,26 @@
 
 这是信用卡客服 Co-Pilot 的向量检索评估项目。当前实现包含可离线运行的 Dense/Sparse/Hybrid/Enhanced 检索基线，并提供 PostgreSQL + pgvector 的真实导入适配器。
 
-## 快速开始
+## Docker 部署
 
-```bash
-python -m pip install -e ".[dev]"
-python -m apex_rag.cli ingest
-python -m apex_rag.cli evaluate
-python -m apex_rag.cli experiments
+从 GitHub 克隆后，一条命令同时启动 PostgreSQL + pgvector 和 FastAPI。容器内会等待数据库就绪、导入 150 篇文档、创建 HNSW 索引，然后监听 18000 端口。没有 `.env` 也可以检索。
+
+```powershell
+git clone https://github.com/kongtianhao0723/apex-rag-retrieval.git
+cd apex-rag-retrieval
+docker compose up --build -d
 ```
 
-结果写入 `reports/results.md` 和 `reports/metrics.csv`，索引参数写入 `data/index_config.json`。`experiments` 会额外生成 `reports/experiments.md`、`reports/chunking_experiment.csv` 和 `reports/index_experiment.csv`，覆盖三种分块策略与 HNSW/IVFFlat 参数对比。
+打开 `http://127.0.0.1:18000/` 使用检索页面，打开 `http://127.0.0.1:18000/docs` 查看 Swagger。检索接口是 `POST /api/v1/search`。
+
+需要 DeepSeek 回答时，在克隆目录复制 `.env.example` 为 `.env`，填入 `DEEPSEEK_API_KEY`，再执行 `docker compose up -d`。密钥只留在本机，不会进入仓库或镜像。
+
+```powershell
+docker compose logs -f api
+docker compose down
+```
+
+`docker compose down` 会停止容器并保留数据库卷。第一次构建会下载 CPU 版 PyTorch 和两个 Sentence Transformers 模型，需要能访问 Docker Hub、PyTorch 和 Hugging Face。模型在构建时下载，启动后离线加载。
 
 ## DeepSeek 回答层
 
@@ -43,27 +53,6 @@ python -m apex_rag.cli evaluate
 ```
 
 正式演示推荐配置记录在 `data/index_config.json`：原始文档块、HNSW `m=16`、`ef_construction=128`、`ef_search=40`。完整实验报告见 `reports/experiments.md`。
-
-## Docker 部署
-
-从 GitHub 克隆后，一条命令同时启动 PostgreSQL + pgvector 和 FastAPI。容器内会等待数据库就绪、导入 150 篇文档、创建 HNSW 索引，然后监听 18000 端口。没有 `.env` 也可以检索。
-
-```powershell
-git clone https://github.com/kongtianhao0723/apex-rag-retrieval.git
-cd apex-rag-retrieval
-docker compose up --build -d
-```
-
-打开 `http://127.0.0.1:18000/` 使用检索页面，打开 `http://127.0.0.1:18000/docs` 查看 Swagger。检索接口是 `POST /api/v1/search`。
-
-需要 DeepSeek 回答时，在克隆目录复制 `.env.example` 为 `.env`，填入 `DEEPSEEK_API_KEY`，再执行 `docker compose up -d`。密钥只留在本机，不会进入仓库或镜像。
-
-```powershell
-docker compose logs -f api
-docker compose down
-```
-
-`docker compose down` 会停止容器并保留数据库卷。第一次构建会下载 CPU 版 PyTorch 和两个 Sentence Transformers 模型，需要能访问 Docker Hub、PyTorch 和 Hugging Face。模型在构建时下载，启动后离线加载。
 
 ## PostgreSQL + pgvector
 
