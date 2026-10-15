@@ -1,0 +1,18 @@
+{
+  "document_count": 150,
+  "chunking_strategy": "original",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "index_type": "hnsw",
+  "hnsw_m": 16,
+  "hnsw_ef_construction": 128,
+  "hnsw_ef_search": 40,
+  "ivfflat_lists": 10,
+  "ivfflat_probes": 5,
+  "recommended_configuration": "original + HNSW(m=16, ef_construction=128, ef_search=40)",
+  "dense_top_k": 20,
+  "sparse_top_k": 20,
+  "final_top_n": 5,
+  "rrf_k": 60,
+  "backend": "postgres"
+}

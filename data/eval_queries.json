@@ -1,0 +1,182 @@
+[
+{
+"query_id": "Q-001",
+"query": "How many days do I have to request a 0% intro balance transfer on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0001", "DOC-0005"],
+"gold_response": "Apex Platinum cardholders have 60 days from account opening to request a 0% intro balance transfer. The intro rate lasts for 15 billing cycles, and a fee of 3% or $10 applies."
+},
+{
+"query_id": "Q-002",
+"query": "What is the balance transfer fee for the Everyday Freedom card?",
+"relevant_doc_ids": ["DOC-0003"],
+"gold_response": "The balance transfer fee for Apex Everyday Freedom is 3% or $5 minimum."
+},
+{
+"query_id": "Q-003",
+"query": "How long does it take for an external balance transfer to process on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0005"],
+"gold_response": "Standard balance transfer requests take 5 to 7 business days to process and pay out to external card issuers."
+},
+{
+"query_id": "Q-004",
+"query": "How long do I have to report an unauthorized charge under the zero liability fraud policy?",
+"relevant_doc_ids": ["DOC-0016", "DOC-0017", "DOC-0018"],
+"gold_response": "Cardholders must report unauthorized transactions within 60 days of the statement date to receive $0 liability protection."
+},
+{
+"query_id": "Q-005",
+"query": "What is the maximum deadline for filing a merchant chargeback dispute?",
+"relevant_doc_ids": ["DOC-0020", "DOC-0021", "DOC-0022"],
+"gold_response": "Merchant disputes must be submitted within 120 calendar days from the original transaction date."
+},
+{
+"query_id": "Q-006",
+"query": "When will I receive my provisional credit during a transaction dispute?",
+"relevant_doc_ids": ["DOC-0024", "DOC-0025", "DOC-0026"],
+"gold_response": "Provisional credit for disputed amounts over $25 is issued within 10 business days of filing."
+},
+{
+"query_id": "Q-007",
+"query": "Can a Tier 1 customer service agent waive the annual fee on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0031"],
+"gold_response": "Tier 1 agents cannot authorize annual fee waivers unless an active retention offer code is present in CRM. The fee is fully refundable if closed within 30 days."
+},
+{
+"query_id": "Q-008",
+"query": "Does the Apex Preferred Travel card charge foreign transaction fees when traveling abroad?",
+"relevant_doc_ids": ["DOC-0036"],
+"gold_response": "No, the Apex Preferred Travel card carries a $0 foreign transaction fee on all international purchases."
+},
+{
+"query_id": "Q-009",
+"query": "What is the daily cutoff time for submitting payments on time?",
+"relevant_doc_ids": ["DOC-0039", "DOC-0040", "DOC-0041"],
+"gold_response": "Payments submitted after 5:00 PM EST on the payment due date are considered late."
+},
+{
+"query_id": "Q-010",
+"query": "How many guest passes are included with Priority Pass Select on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0046"],
+"gold_response": "Priority Pass grants lounge access for the primary Apex Platinum cardholder plus up to 2 guests. Additional guests cost $35 per visit."
+},
+{
+"query_id": "Q-011",
+"query": "Do Apex Reward points expire if I keep my account active?",
+"relevant_doc_ids": ["DOC-0050", "DOC-0051", "DOC-0052"],
+"gold_response": "Apex Rewards points do not expire as long as your account remains open and in good standing."
+},
+{
+"query_id": "Q-012",
+"query": "What is the deductible and coverage limit for cell phone protection on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0054"],
+"gold_response": "Coverage provides up to $800 per claim with a $50 deductible for damage or theft, limited to 2 claims per 12-month period."
+},
+{
+"query_id": "Q-013",
+"query": "How quickly can I receive an emergency replacement card if lost overseas on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0061"],
+"gold_response": "Emergency replacement cards can be delivered globally within 24 to 48 hours for Apex Platinum cardholders."
+},
+{
+"query_id": "Q-014",
+"query": "How many months must I wait before requesting a credit limit increase?",
+"relevant_doc_ids": ["DOC-0065", "DOC-0066", "DOC-0067"],
+"gold_response": "Cardholders are eligible to request a credit limit increase after 6 months of active, on-time account history."
+},
+{
+"query_id": "Q-015",
+"query": "Does requesting a credit limit increase over 50% trigger a hard credit inquiry?",
+"relevant_doc_ids": ["DOC-0065"],
+"gold_response": "Yes, hard inquiries are required for requested line increases exceeding 50% of the current credit limit, whereas soft pulls are used for standard increases."
+},
+{
+"query_id": "Q-016",
+"query": "What is the fee for adding authorized users to an Apex Platinum card?",
+"relevant_doc_ids": ["DOC-0076"],
+"gold_response": "Primary cardholders may add up to 4 authorized users for $175 total per year on Apex Platinum."
+},
+{
+"query_id": "Q-017",
+"query": "Is there a fee for adding an authorized user on Apex Everyday Freedom?",
+"relevant_doc_ids": ["DOC-0077"],
+"gold_response": "No, authorized users can be added to an Apex Everyday Freedom account for $0 additional fee."
+},
+{
+"query_id": "Q-018",
+"query": "What rental car collision insurance is provided by Apex Platinum?",
+"relevant_doc_ids": ["DOC-0094"],
+"gold_response": "Apex Platinum provides primary auto rental collision damage waiver coverage up to $75,000 when commercial rental company waivers are declined."
+},
+{
+"query_id": "Q-019",
+"query": "What is the annual flight and hotel statement credit on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0058"],
+"gold_response": "Apex Platinum provides an automatic $300 statement credit per calendar year for eligible flight, hotel, and transit purchases."
+},
+{
+"query_id": "Q-020",
+"query": "What is the trip delay reimbursement policy threshold and amount for Apex Platinum?",
+"relevant_doc_ids": ["DOC-0099"],
+"gold_response": "If a flight is delayed more than 6 hours or requires an overnight stay, reasonable meal and lodging expenses are covered up to $500 per ticket."
+},
+{
+"query_id": "Q-021",
+"query": "What foreign transaction fee applies to the Apex Everyday Freedom card?",
+"relevant_doc_ids": ["DOC-0037"],
+"gold_response": "Apex Everyday Freedom cards incur a 3% foreign transaction fee on purchases made in foreign currencies or via non-US acquiring banks."
+},
+{
+"query_id": "Q-022",
+"query": "What is the cash advance APR and fee on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0043"],
+"gold_response": "The cash advance fee is 5% or $10 minimum, with a variable cash advance APR of 29.99% that begins accruing immediately."
+},
+{
+"query_id": "Q-023",
+"query": "Are corporate employee phones covered under Apex Business Select cell phone protection?",
+"relevant_doc_ids": ["DOC-0057"],
+"gold_response": "Yes, coverage provides up to $1,000 per claim with a $100 deductible for business employee phones paid on the primary account, limited to 5 claims per year."
+},
+{
+"query_id": "Q-024",
+"query": "Can virtual card numbers be generated with custom spending limits on Apex Platinum?",
+"relevant_doc_ids": ["DOC-0073"],
+"gold_response": "Yes, unlimited dynamic virtual card numbers can be generated via the mobile app with custom spending caps."
+},
+{
+"query_id": "Q-025",
+"query": "What happens if a provisional credit investigation resolves in favor of the merchant?",
+"relevant_doc_ids": ["DOC-0024"],
+"gold_response": "If the investigation resolves in favor of the merchant, the provisional credit will be revoked with a 10-day advance notification to the cardholder."
+},
+{
+"query_id": "Q-026",
+"query": "What is the maximum emergency cash disbursement amount available abroad for Platinum holders?",
+"relevant_doc_ids": ["DOC-0061"],
+"gold_response": "Emergency cash disbursements up to $1,000 USD can be arranged via Western Union within 4 hours."
+},
+{
+"query_id": "Q-027",
+"query": "What is the minimum credit line issued for an Apex Platinum account?",
+"relevant_doc_ids": ["DOC-0106"],
+"gold_response": "Initial credit line assignments for Apex Platinum start at a minimum of $10,000 up to $100,000."
+},
+{
+"query_id": "Q-028",
+"query": "How often can I change my payment due date on Apex Everyday Freedom?",
+"relevant_doc_ids": ["DOC-0149"],
+"gold_response": "Cardholders may change their payment due date once every 12 months via the online portal."
+},
+{
+"query_id": "Q-029",
+"query": "Does Apex Preferred Travel offer Global Entry or TSA PreCheck application fee credits?",
+"relevant_doc_ids": ["DOC-0060"],
+"gold_response": "The Global Entry / TSA PreCheck credit (up to $100 every 4 years) is an exclusive benefit for Apex Platinum cardholders."
+},
+{
+"query_id": "Q-030",
+"query": "What is the interest grace period duration on purchase balances for Apex Platinum?",
+"relevant_doc_ids": ["DOC-0039"],
+"gold_response": "The interest grace period is 21 days for purchase balances if the previous billing cycle balance was paid in full."
+}
+]

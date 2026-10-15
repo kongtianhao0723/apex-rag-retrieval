@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apex RAG 检索工作台</title>
+  <style>
+    :root { --ink:#162033; --muted:#667085; --line:#e5e7eb; --brand:#175cd3; --soft:#eff6ff; --bg:#f7f9fc; --card:#fff; --good:#067647; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--bg); font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif; }
+    .shell { max-width:1180px; margin:0 auto; padding:32px 20px 56px; }
+    header { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; margin-bottom:28px; }
+    h1 { margin:0 0 7px; font-size:30px; letter-spacing:-.02em; }
+    .sub { color:var(--muted); margin:0; }
+    .status { color:var(--good); background:#ecfdf3; border:1px solid #abefc6; border-radius:999px; padding:6px 12px; white-space:nowrap; }
+    .panel, .result { background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:0 5px 18px #1018280a; }
+    .panel { padding:20px; margin-bottom:22px; }
+    .query-row { display:flex; gap:10px; }
+    input, select, button { border:1px solid #d0d5dd; border-radius:9px; padding:10px 12px; font:inherit; }
+    input:focus, select:focus { border-color:var(--brand); outline:3px solid #dbeafe; }
+    #query { flex:1; font-size:16px; }
+    button { background:var(--brand); color:#fff; border-color:var(--brand); cursor:pointer; font-weight:600; min-width:92px; }
+    button:disabled { opacity:.6; cursor:wait; }
+    .filters { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+    .filters select { width:100%; background:#fff; }
+    .hint { color:var(--muted); margin-top:10px; font-size:13px; }
+    .summary { display:flex; justify-content:space-between; color:var(--muted); margin:0 0 12px; }
+    .results { display:grid; gap:12px; }
+    .result { padding:18px 20px; }
+    .result-head { display:flex; align-items:flex-start; gap:12px; justify-content:space-between; }
+    .rank { color:#fff; background:var(--brand); border-radius:8px; min-width:30px; height:30px; display:grid; place-items:center; font-weight:700; }
+    .title { flex:1; margin:0; font-size:17px; }
+    .meta { color:var(--muted); font-size:12px; margin:4px 0 12px 42px; }
+    .content { margin:0 0 13px 42px; color:#344054; }
+    .scores { display:flex; gap:7px; flex-wrap:wrap; margin-left:42px; }
+    .score { background:#f2f4f7; border-radius:999px; padding:3px 9px; color:#475467; font-size:12px; }
+    .empty { color:var(--muted); text-align:center; padding:36px; border:1px dashed #d0d5dd; border-radius:12px; }
+    .error { color:#b42318; background:#fef3f2; border:1px solid #fecdca; border-radius:10px; padding:12px; }
+    .answer { background:#f0f9ff; border:1px solid #b9e6fe; border-radius:14px; padding:18px 20px; margin-bottom:14px; }
+    .answer h2 { margin:0 0 8px; font-size:18px; color:#175cd3; }
+    .answer p { margin:0; white-space:pre-wrap; color:#1d2939; }
+    .answer-note { color:var(--muted); font-size:12px; margin-top:8px; }
+    @media (max-width:700px) { header { display:block; } .status { display:inline-block; margin-top:14px; } .query-row { flex-wrap:wrap; } #query { flex-basis:100%; } .filters { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div><h1>Apex RAG 检索工作台</h1><p class="sub">信用卡客服知识库 · pgvector Dense / Hybrid / Enhanced 检索</p></div>
+      <div class="status" id="status">正在连接…</div>
+    </header>
+    <section class="panel">
+      <form id="search-form">
+        <div class="query-row">
+          <input id="query" autocomplete="off" placeholder="例如：What should I do if my card was stolen?" required />
+          <select id="mode" aria-label="检索模式"><option value="enhanced">Enhanced（融合 + 重排）</option><option value="hybrid">Hybrid（Dense + Sparse）</option><option value="dense">Dense（向量检索）</option></select>
+          <select id="top-k" aria-label="返回数量"><option value="5">Top 5</option><option value="10">Top 10</option><option value="20">Top 20</option></select>
+          <button id="submit" type="submit">开始检索</button>
+        </div>
+        <div class="filters">
+          <select id="category" aria-label="分类"><option value="">全部分类</option></select>
+          <select id="tier" aria-label="卡片等级"><option value="">全部卡等级</option></select>
+        </div>
+        <div class="hint">支持回车检索。结果中的分数用于解释排序，不代表客服最终答案。</div>
+      </form>
+    </section>
+    <div class="summary"><span id="summary">输入问题开始检索</span><span id="latency"></span></div>
+    <section id="results" class="results"><div class="empty">检索结果会显示在这里</div></section>
+  </main>
+  <script>
+    const form = document.querySelector('#search-form'), query = document.querySelector('#query');
+    const submit = document.querySelector('#submit'), status = document.querySelector('#status');
+    const results = document.querySelector('#results'), summary = document.querySelector('#summary'), latency = document.querySelector('#latency');
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const score = (name, value) => `<span class="score">${name}: ${Number(value || 0).toFixed(4)}</span>`;
+    function fillSelect(id, values, placeholder) {
+      const select = document.querySelector(id);
+      select.innerHTML = `<option value="">${esc(placeholder)}</option>` + values.map(value => `<option value="${esc(value)}">${esc(value)}</option>`).join('');
+    }
+    async function loadFilters() {
+      try {
+        const response = await fetch('/api/v1/filters');
+        if (!response.ok) throw Error();
+        const data = await response.json();
+        fillSelect('#category', data.categories || [], '全部分类');
+        fillSelect('#tier', data.card_tiers || [], '全部卡等级');
+      } catch { /* 下拉框保留“全部”选项，检索仍可进行 */ }
+    }
+    async function checkHealth() { try { const r = await fetch('/api/v1/health'); if (!r.ok) throw Error(); status.textContent = '服务在线 · PostgreSQL'; } catch { status.textContent = '服务未连接'; status.style.color='#b42318'; status.style.background='#fef3f2'; } }
+    form.addEventListener('submit', async event => {
+      event.preventDefault(); const text = query.value.trim(); if (!text) return;
+      submit.disabled = true; submit.textContent = '检索中…'; results.innerHTML = '<div class="empty">正在调用 Embedding、pgvector 和重排模型…</div>';
+      const payload = { query:text, mode:document.querySelector('#mode').value, top_k:Number(document.querySelector('#top-k').value), category:document.querySelector('#category').value, card_tier:document.querySelector('#tier').value };
+      try {
+        const response = await fetch('/api/v1/search', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+        const data = await response.json(); if (!response.ok || data.error) throw Error(data.error || '请求失败');
+        summary.textContent = `“${text}” · ${data.results.length} 条结果`; latency.textContent = `${Number(data.latency_ms).toFixed(1)} ms`;
+        const answerBlock = data.answer ? `<article class="answer"><h2>${data.answer_source === 'retrieval_fallback' ? '检索上下文回答' : 'DeepSeek 回答'}</h2><p>${esc(data.answer)}</p><div class="answer-note">${data.answer_source === 'retrieval_fallback' ? `DeepSeek 暂时不可用：${esc(data.answer_error || '')} · 已展示检索到的原文` : `模型：${esc(data.answer_model || 'DeepSeek')} · 回答仅基于下方检索上下文`}</div></article>` : (data.answer_error ? `<article class="answer"><h2>回答暂不可用</h2><p>${esc(data.answer_error)}</p><div class="answer-note">检索结果仍可正常使用</div></article>` : '');
+        results.innerHTML = answerBlock + (data.results.length ? data.results.map(item => `<article class="result"><div class="result-head"><span class="rank">${item.rank}</span><h2 class="title">${esc(item.title)}</h2></div><div class="meta">${esc(item.doc_id)} · ${esc(item.category)} · ${esc(item.card_tier)} · ${esc(item.effective_year)}</div><p class="content">${esc(item.content)}</p><div class="scores">${score('Dense',item.scores.dense)}${score('Sparse',item.scores.sparse)}${score('RRF',item.scores.rrf)}${score('Rerank',item.scores.rerank)}</div></article>`).join('') : '<div class="empty">没有找到符合条件的文档，请调整问题或过滤条件。</div>');
+      } catch (error) { summary.textContent = '检索失败'; latency.textContent = ''; results.innerHTML = `<div class="error">${esc(error.message)}</div>`; }
+      finally { submit.disabled = false; submit.textContent = '开始检索'; }
+    });
+    checkHealth(); loadFilters(); query.focus();
+  </script>
+</body>
+</html>
