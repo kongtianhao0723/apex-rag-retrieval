@@ -14,7 +14,7 @@ docker compose up --build -d
 
 打开 `http://127.0.0.1:18000/` 使用检索页面，打开 `http://127.0.0.1:18000/docs` 查看 Swagger。检索接口是 `POST /api/v1/search`。
 
-需要 DeepSeek 回答时，在克隆目录复制 `.env.example` 为 `.env`，填入 `DEEPSEEK_API_KEY`，再执行 `docker compose up -d`。密钥只留在本机，不会进入仓库或镜像。
+仓库里已经有 `.env`。上面的启动命令会读入其中的 DeepSeek 配置，检索和回答一起启用。
 
 ```powershell
 docker compose logs -f api
